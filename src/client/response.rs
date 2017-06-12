@@ -347,7 +347,7 @@ impl ProviderResponse {
             Some("MissingDeviceToken")        => Some(APNSError::MissingDeviceToken),
             Some("BadDeviceToken")            => Some(APNSError::BadDeviceToken),
             Some("DeviceTokenNotForTopic")    => Some(APNSError::DeviceTokenNotForTopic),
-            Some("Unresgistered")             => Some(APNSError::Unregistered),
+            Some("Unregistered")              => Some(APNSError::Unregistered),
             Some("DuplicateHeaders")          => Some(APNSError::DuplicateHeaders),
             Some("BadCertificateEnvironment") => Some(APNSError::BadCertificateEnvironment),
             Some("BadCertificate")            => Some(APNSError::BadCertificate),
