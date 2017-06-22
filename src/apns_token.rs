@@ -153,7 +153,7 @@ impl APNSToken {
     /// ```
     pub fn is_expired(&self) -> bool {
         if let Some(issued_at) = self.issued_at {
-            (get_time().sec - issued_at) > 3600
+            (get_time().sec - issued_at) > 600
         } else {
             true
         }
