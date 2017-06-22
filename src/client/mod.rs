@@ -10,7 +10,7 @@ mod token;
 
 pub use self::token::TokenClient;
 pub use self::certificate::CertificateClient;
-pub use self::response::{ProviderResponse, APNSStatus, APNSError};
+pub use self::response::{ProviderResponse, Response, APNSStatus, APNSError};
 
 static DEVELOPMENT: &'static str = "api.development.push.apple.com";
 static PRODUCTION: &'static str = "api.push.apple.com";
