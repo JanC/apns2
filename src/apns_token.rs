@@ -152,10 +152,12 @@ impl APNSToken {
     /// # }
     /// ```
     pub fn is_expired(&self) -> bool {
+        true // for now, sometimes the same key doesn't work after a while
+        /*
         if let Some(issued_at) = self.issued_at {
             (get_time().sec - issued_at) > 20
         } else {
             true
-        }
+        } */
     }
 }
