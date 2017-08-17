@@ -16,6 +16,7 @@ pub struct APNSToken {
     key_id: String,
     team_id: String,
     secret: LocalKeyPair,
+    expire_after_s: i64,
 }
 
 #[derive(Debug)]
@@ -55,10 +56,10 @@ impl APNSToken {
     /// use std::fs::File;
     ///
     /// let der_file = File::open("/path/to/apns.der").unwrap();
-    /// APNSToken::new(der_file, "TEAMID1234", "KEYID12345").unwrap();
+    /// APNSToken::new(der_file, "TEAMID1234", "KEYID12345", 30).unwrap();
     /// # }
     /// ```
-    pub fn new<S,R>(mut pk_der: R, key_id: S, team_id: S) -> Result<APNSToken, APNSTokenError>
+    pub fn new<S,R>(mut pk_der: R, key_id: S, team_id: S, expire_after_s: i64) -> Result<APNSToken, APNSTokenError>
         where S: Into<String>, R: Read {
 
         let mut token = APNSToken {
@@ -67,6 +68,7 @@ impl APNSToken {
             key_id: key_id.into(),
             team_id: team_id.into(),
             secret: LocalKeyPair::new(&mut pk_der, "apns_private_key")?,
+            expire_after_s: expire_after_s,
         };
 
         match token.renew() {
@@ -112,7 +114,7 @@ impl APNSToken {
     /// # }
     /// ```
     pub fn renew(&mut self) -> Result<(), APNSTokenError> {
-        let issued_at = get_time().sec;
+        let issued_at = get_time().sec - 10;
 
         let mut headers: BTreeMap<String, JsonNode> = BTreeMap::new();
         headers.insert("alg".to_string(), JsonNode::String("ES256".to_string()));
@@ -135,7 +137,7 @@ impl APNSToken {
         }
     }
 
-    /// Info about the token expiration. If older than one hour, returns true.
+    /// Info about the token expiration. If older than the renew after value, returns true.
     ///
     /// # Example
     /// ```no_run
@@ -152,12 +154,10 @@ impl APNSToken {
     /// # }
     /// ```
     pub fn is_expired(&self) -> bool {
-        true // for now, sometimes the same key doesn't work after a while
-        /*
         if let Some(issued_at) = self.issued_at {
-            (get_time().sec - issued_at) > 20
+            (get_time().sec - issued_at) > self.expire_after_s
         } else {
             true
-        } */
+        }
     }
 }
