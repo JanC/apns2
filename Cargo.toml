@@ -24,6 +24,7 @@ argparse = "*"
 
 [dependencies.solicit]
 git = "https://github.com/pimeys/solicit"
+branch = "pimeys_master"
 default-features = true
 features = ["tls"]
 
