@@ -55,17 +55,17 @@ impl CertificateClient {
         let host    = if sandbox { DEVELOPMENT } else { PRODUCTION };
         let mut ctx = SslContext::new(SslMethod::Sslv23).unwrap();
 
-        let x509 = X509::from_pem(certificate)?;
-        let pkey = PKey::private_key_from_pem(private_key)?;
+        let x509 = X509::from_pem(certificate).unwrap();
+        let pkey = PKey::private_key_from_pem(private_key).unwrap();
 
-        ctx.set_cipher_list("DEFAULT")?;
-        ctx.set_certificate(&x509)?;
-        ctx.set_private_key(&pkey)?;
+        ctx.set_cipher_list("DEFAULT").unwrap();
+        ctx.set_certificate(&x509).unwrap();
+        ctx.set_private_key(&pkey).unwrap();
         ctx.set_verify(SSL_VERIFY_NONE, None);
         ctx.set_alpn_protocols(&[b"h2"]);
 
         let connector = TlsConnector::with_context(host, &ctx);
-        let client = Client::with_connector(connector)?;
+        let client = Client::with_connector(connector).unwrap();
 
         Ok(CertificateClient {
             client: client,
