@@ -128,7 +128,7 @@ impl From<SslError> for APNSError {
 
 impl From<ClientConnectError<TlsConnectError>> for APNSError {
     fn from(e: ClientConnectError<TlsConnectError>) -> APNSError {
-        APNSError::ClientConnectError(format!("Error connecting to the APNs servers: {}", e.description()))
+        APNSError::ClientConnectError(format!("Error connecting to the APNs servers: {}: {:?}", e.description(), e.cause()))
     }
 }
 
