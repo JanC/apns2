@@ -269,6 +269,7 @@ impl ProviderResponse {
                     Ok(http_response) => {
                         let status        = Self::fetch_status(http_response.status_code().ok());
                         let apns_id       = Self::fetch_apns_id(http_response.headers);
+                        println!("JSON {:?}", str::from_utf8(&http_response.body));
                         let json          = str::from_utf8(&http_response.body).ok().and_then(|v| Json::from_str(v).ok());
                         let object        = json.as_ref().and_then(|v| v.as_object());
                         let reason        = Self::fetch_reason(object);
